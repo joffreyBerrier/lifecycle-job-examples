@@ -1,4 +1,9 @@
 #!/bin/env bash
+# Ajout d'une commande delete si la db exise déjà et ensuite exécuter le seed
+TABLE_EXISTS=$(psql "${DATABASE_URL}" -t -c "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename = '${TABLE_NAME}');")
+if [[ "${TABLE_EXISTS}" == "t" ]]; then  
+  exit 0
+fi
 
 # Check if DATABASE_URL is set
 if [[ -z "${DATABASE_URL}" ]]; then
