@@ -1,7 +1,7 @@
 #!/bin/env bash
 # Ajout d'une commande delete si la db exise déjà et ensuite exécuter le seed
 TABLE_EXISTS=$(psql "${DATABASE_URL}" -t -c "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename = '${TABLE_NAME}');")
-if [[ "${TABLE_EXISTS}" == "t" ]]; then  
+if [[ "${TABLE_EXISTS}" == "t" ]]; then
   exit 0
 fi
 
@@ -27,29 +27,30 @@ fi
 # SEED_URL="http://your-bucket.s3.amazonaws.com/seed.sql"
 
 # Check if DATABASE_URL is set
-if [[ -z "${SEED_URL}" ]]; then
-  echo "The SEED_URL environment variable is not set."
-  exit 1
-fi
+# if [[ -z "${SEED_URL}" ]]; then
+#   echo "The SEED_URL environment variable is not set."
+#   exit 1
+# fi
 
 # Download the SQL dump
-curl "${SEED_URL}" -o seed.sql
+# curl "${SEED_URL}" -o seed.sql
 
-if [[ $? -ne 0 ]]; then
-  echo "An error occurred while downloading the SQL dump."
-  exit 1
-fi
+# if [[ $? -ne 0 ]]; then
+#   echo "An error occurred while downloading the SQL dump."
+#   exit 1
+# fi
 
-# Check if seed.sql exists in the current directory
-if [[ ! -f "seed.sql" ]]; then
-  echo "The seed.sql file could not be found in the current directory."
-  exit 1
-fi
+# # Check if seed.sql exists in the current directory
+# if [[ ! -f "seed.sql" ]]; then
+#   echo "The seed.sql file could not be found in the current directory."
+#   exit 1
+# fi
 
 echo "Database seeding started."
 
 # Seed the database
-pg_restore -d "$DATABASE_URL" seed.sql --no-owner
+# pg_restore -d "$DATABASE_URL" seed.sql --no-owner
+curl "${SEED_URL}" | pg_restore -d ${DATABASE_NAME} --no-owner
 
 if [[ $? -eq 0 ]]; then
   echo "Database seeding completed successfully."
