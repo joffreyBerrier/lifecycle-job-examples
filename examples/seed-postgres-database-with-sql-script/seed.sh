@@ -50,7 +50,7 @@ echo "Database seeding started."
 
 # Seed the database
 # pg_restore -d "$DATABASE_URL" seed.sql --no-owner
-curl "${SEED_URL}" | pg_restore -d ${DATABASE_NAME} --no-owner
+curl "${SEED_URL}" | pg_restore -d ${DATABASE_URL} --no-owner
 
 if [[ $? -eq 0 ]]; then
   echo "Database seeding completed successfully."
